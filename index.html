@@ -1,0 +1,283 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>Teste Grid</title>
+
+	<meta name="description" content="gridster.js, a drag-and-drop multi-column jQuery grid plugin">
+	<meta name="author" content="duscksboard">
+
+    <link rel="stylesheet" type="text/css" href="dist/jquery.gridster.min.css">
+    
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />    
+</head>
+<body>
+
+	<div id="keys">
+        <div class="key s1x1 middle-text ui-draggable"></div>
+        <div class="key s2x1 horizontal ui-draggable"></div>
+        <div class="key s1x1 middle-image ui-draggable"></div>
+        <div class="key s2x1 horizontal-2 ui-draggable"></div>
+        <div class="key s1x2 vertical ui-draggable"></div>
+        <div class="key s1x2 vertical-2 ui-draggable"></div>
+        <div class="key s1x2 vertical-3 ui-draggable"></div>
+	</div>
+
+	<div id="workingArea">
+		<div id="placeholderGrid" class="grid"></div>
+	    <div id="workingGrid" class="grid"></div>
+	</div>
+
+	<script type="text/javascript" src="libs/jquery/jquery.js"></script>
+	<script type="text/javascript" src="dist/underscore-min.js"></script>
+	<script type="text/javascript" src="dist/block.js"></script>
+	<script type="text/javascript" src="dist/grid.js"></script>
+	<script type="text/javascript" src="dist/jquery.mousewheel.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+    <style>
+    	body { padding: 80px; display: block; }
+    	li { list-style: none; }
+    	.grid { height: 520px; display: block; width: 2500px; position: absolute; }
+    	.block { width: 240px; height: 240px; margin: 0 10px 10px 0; background: #fafafa; }
+    	.block { width: 240px; height: 240px; margin: 0 10px 10px 0; background: #fafafa; float: left; }    	
+    	#keys, 
+    	#workingArea { float: left; }
+    	#keys { width: 375px; }
+    	#workingArea { overflow: auto; overflow-y: hidden; height: 515px; position: relative; margin-left: 80px; }
+    	
+    	#workingGrid .block, .key { background: #0093D0; }
+    	#workingGrid .block,
+    	.dragging.block { display: block; position: absolute; border: 1px solid white; background-color: #0093D0; }
+    	.key {  margin: 0 10px 10px 0; float: left; background-color: #0093D0; }
+
+    	.key.s1x1 {
+		  	height: 115px;
+		  	width: 115px;
+		}
+
+		.key.s2x1 {
+		  	height: 115px;
+		  	width: 240px; 
+		}
+
+		.key.s1x2 {
+		  	height: 240px;
+		  	width: 115px; 
+		}
+
+		.block.s1x1 {
+		  	height: 240px;
+		  	width: 240px;
+		}
+
+		.block.s2x1 {
+		  	height: 240px;
+		  	width: 490px; 
+		}
+
+		.block.s1x2 {
+		  	height: 490px;
+		  	width: 240px; 
+		}
+
+		.ui-draggable-dragging,
+		.dragging { opacity: .4; z-index: 999; }
+
+		.dragging {
+			-webkit-transition-property: width, height;
+			-moz-transition-property: width, height;
+			-o-transition-property: width, height;
+			transition-property: width, height;
+			-webkit-transition-duration: .2s, .2s;
+			-moz-transition-duration: .2s, .2s;
+			-o-transition-duration: .2s, .2s;
+			transition-duration: .2s, .2s;
+			-webkit-transition-timing-function: ease-out, ease-out;
+			-moz-transition-timing-function: ease-out, ease-out;
+			-o-transition-timing-function: ease-out, ease-out;
+			transition-timing-function: ease-out, ease-out; 
+		}
+
+		.block.dragging.doesntFit { background-color: grey; }
+
+		#placeholderGrid.canFit .block.draggingOver { background-color: #67b6ce; }
+
+		#placeholderGrid.cantFit .block.draggingOver { background-color: #f4ab8c; }
+    </style>
+    <script>
+		var prevBlock;
+
+	    $(function() {
+			$('#workingArea').width($(window).width() - $('#keys').width() - 256).mousewheel(function(event, delta) {
+      			this.scrollLeft -= (delta * 30);    
+      			event.preventDefault();
+   			});
+
+			window.placeholderGrid = new Models.Grid(10, 2, $('#placeholderGrid'));
+			_.times(20, function(){
+				placeholderGrid.add(new Models.Block(1, 1))
+			});
+
+			window.grid = new Models.Grid(10, 2, $('#workingGrid'));
+
+			$('.key').draggable({
+				helper: renderDragHelper,
+				scroll: true
+			});
+
+			$('#placeholderGrid .block').droppable({
+				over: overGridHandler,
+				drop: dropGridHandler
+			});
+
+			$('#workingGrid').droppable({
+				out: outGridHandler
+			});
+
+			$('.key').bind('touchend', keyTouchHandler);
+	    });
+
+	    var renderDragHelper = function() {
+			var sizeHash = new Models.Block().sizeFromElement($(this).attr('class'));
+			var sizeClass = 's' + sizeHash.width + 'x' + sizeHash.height;
+			var helper = $('<li class="key dragging ' + sizeClass + '"></li>');
+
+			return helper;
+		}
+
+		var overGridHandler = function(event, ui) {
+		  
+			// scale key up to grid size
+			if (ui.helper.hasClass('key')){
+				ui.helper.removeClass('key').addClass('block');
+			}
+
+			// add class to style according to wether piece fits or not
+			$('#placeholderGrid').removeClass('canFit');
+			$('#placeholderGrid').removeClass('cantFit');
+
+			if (grid.canFit(generateBlock(ui.helper, $(this)))){
+				$('#placeholderGrid').addClass('canFit');
+			} else {
+				$('#placeholderGrid').addClass('cantFit');
+			}
+
+			showFitWhileDragging(ui.helper, $(this));
+		}
+
+		var outGridHandler = function() {
+		  	clearFit();
+		}
+
+		var showFitWhileDragging = function(helper, unit) {
+			var overlapped = placeholderGrid.blocksOverlappedByBlock(generateBlock(helper, unit) );
+
+			$('#placeholderGrid .block').removeClass('draggingOver');
+
+			_(overlapped).each(function(block) {
+				block.element.addClass('draggingOver');
+			});
+		}
+
+		var clearFit = function() {
+			$('.dragging.block').removeClass('block').addClass('key');
+			$('.draggingOver').removeClass('draggingOver');
+		}
+
+		var dropGridHandler = function(event, ui) {
+			var success = grid.place(generateBlock(ui.helper, $(this)));
+			clearFit();
+			$('#workingGrid .block:not("ui-draggable")').draggable({
+				start: function(e, u) {
+        			$(this).data("origPosition", $(this).position());
+					prevBlock = generateBlock(u.helper, $(this));
+        		}
+			});
+
+			if (success) {
+				$(ui.helper).remove();
+				if (prevBlock) {
+					grid.remove(prevBlock.x, prevBlock.y);
+					prevBlock = null;
+				}
+			}
+			else
+				ui.draggable.animate(ui.draggable.data().origPosition, "fast");
+		}
+
+		var keyTouchHandler = function(event) {
+			var block = new Models.Block();
+			var size = block.sizeFromElement($(this).attr('class'));
+
+			block.width = size.width;
+			block.height = size.height;
+
+			grid.add( block );
+
+			if (grid.isComplete()) {
+				enableShowCode();
+			}
+		}
+
+		var generateBlock = function(draggedBlock, unit) {
+			var block = new Models.Block();
+			var size = block.sizeFromElement(draggedBlock.attr('class'))
+			var position = block.positionFromElement(unit.attr('class'));
+
+			block.width = size.width;
+			block.height = size.height;
+			block.x = position.x;
+			block.y = position.y;
+
+			return block;
+		}
+
+		var revertDraggable = function revertDraggable($selector) {
+		    $selector.each(function() {
+		        var $this = $(this),
+		            position = $this.data("originalPosition");
+
+		        if (position) {
+		            $this.animate({
+		                left: position.left,
+		                top: position.top
+		            }, 500, function() {
+		                $this.data("originalPosition", null);
+		            });
+		        }
+		    });
+		}
+    </script>
+	<script type="text/javascript">
+  		/*var gridster;
+
+	  	$(function() {
+		    gridster = $(".gridster > ul").gridster({
+		        widget_margins: [5, 5],
+		        widget_base_dimensions: [240, 240],
+		        min_widget_width: 1
+		    }).data('gridster');
+
+			var w = 0;
+		    $(".gridster").each(function() { 
+	    		$(this).find('li[data-row="1"]').each(function(){
+	    			w += $(this).width();
+	    		});
+		    	$(this).css('width', w + 'px');
+		    	w = 0;
+		    });
+
+			$('#hub > li').each(function() {
+				$(this).find('li[data-row="1"]').not(':first').each(function(){
+	    			w += 10;
+	    		});
+				w += $(this).width() + 80;
+			});
+
+		    $('#hub').css('width', w + 'px');
+	  	});*/
+	</script>
+</body>
+</html>
