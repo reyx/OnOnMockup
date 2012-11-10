@@ -9,25 +9,38 @@
 	<meta name="description" content="gridster.js, a drag-and-drop multi-column jQuery grid plugin">
 	<meta name="author" content="duscksboard">
 
-    <link rel="stylesheet" type="text/css" href="dist/jquery.gridster.min.css">
+    <link rel="stylesheet" type="text/css" href="dist/jquery.gridster.min.css" />
+    <link rel="stylesheet" type="text/css" href="dist/icomoon.css" />
     
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />    
+
+    <!-- remove or comment this line if you want to use the local fonts -->
+   	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
 </head>
 <body>
 
 	<div id="keys">
+        <div class="key s1x2 vertical ui-draggable"></div>
+        <div class="key s1x2 vertical-2 ui-draggable"></div>
+        <div class="key s1x2 vertical-3 ui-draggable"></div>
         <div class="key s1x1 middle-text ui-draggable"></div>
         <div class="key s2x1 horizontal ui-draggable"></div>
         <div class="key s1x1 middle-image ui-draggable"></div>
         <div class="key s2x1 horizontal-2 ui-draggable"></div>
-        <div class="key s1x2 vertical ui-draggable"></div>
-        <div class="key s1x2 vertical-2 ui-draggable"></div>
-        <div class="key s1x2 vertical-3 ui-draggable"></div>
 	</div>
 
 	<div id="workingArea">
 		<div id="placeholderGrid" class="grid"></div>
 	    <div id="workingGrid" class="grid"></div>
+	</div>
+
+	<div id="appBar">
+		<div class="row">
+			<a class="win-command">
+				<span class="win-commandimage win-commandring">&#xE001;</span>
+				<span class="win-label">Excluir</span>
+			</a>
+		</div>
 	</div>
 
 	<script type="text/javascript" src="libs/jquery/jquery.js"></script>
@@ -37,19 +50,72 @@
 	<script type="text/javascript" src="dist/jquery.mousewheel.min.js"></script>
 	<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
     <style>
-    	body { padding: 80px; display: block; }
+    	body { padding: 80px; display: block; overflow: hidden; }
     	li { list-style: none; }
     	.grid { height: 520px; display: block; width: 2500px; position: absolute; }
     	.block { width: 240px; height: 240px; margin: 0 10px 10px 0; background: #fafafa; }
-    	.block { width: 240px; height: 240px; margin: 0 10px 10px 0; background: #fafafa; float: left; }    	
+    	.block { width: 240px; height: 240px; margin: 0 10px 10px 0; background: #fafafa; float: left; }
+    	.win-command {
+    		text-align: center;
+			font-size: 9pt;
+			font-weight: normal;
+			line-height: 16px;
+			cursor: pointer;
+			background: none;
+			background-clip: border-box;
+			height: auto;
+			padding: 12px 0;
+			margin: 0 5px;
+			border: 0;
+			min-width: 42px;
+			text-align: center;
+			font-size: 9pt;
+			font-weight: normal;
+			line-height: 16px;
+			vertical-align: middle;
+			color: white;
+    	}
+    	.win-commandring { background-color: transparent; border-color: white; border-width: 2px; border-style: solid; -webkit-border-radius: 50%; -moz-border-radius: 50%; border-radius: 50%; background-clip: border-box; }
+    	.win-commandimage { 
+    		color: white; font-family: "IcoMoon";
+			letter-spacing: 0;
+			vertical-align: middle;
+			font-size: 14pt;
+			margin: -2px;
+			line-height: 40px;
+			background-position: 0 0;
+			display: inline-block;
+			width: 40px;
+			height: 40px;
+			background-size: 160px 80px;
+		}
+		.win-label {
+			position: relative;
+			line-height: 20px;
+			display: block;
+			max-width: 88px; /* 100px button, but allow for 2px margins and 4px padding on each side */
+			padding-left: 4px;  /* 12px between buttons, 6px per side, minus 2px margins */
+			padding-right: 4px;
+			overflow: hidden;
+			word-wrap: break-word;
+			word-break: keep-all;
+			top: 1px;
+			text-align: center;
+			font-size: 9pt;
+			font-weight: normal;
+			font-family: "Open Sans", Helvetica,"Helvetica Neue",Sans-Serif;
+		}
+    	#appBar { position: absolute; bottom: 0; left: 0; right: 0; background: #0093D0; display: none; }
+    	#appBar .row { margin: 20px 80px; }
     	#keys, 
     	#workingArea { float: left; }
     	#keys { width: 375px; }
     	#workingArea { overflow: auto; overflow-y: hidden; height: 515px; position: relative; margin-left: 80px; }
     	
-    	#workingGrid .block, .key { background: #0093D0; }
+    	#workingGrid .block, 
+    	.key { background: #0093D0; }
     	#workingGrid .block,
-    	.dragging.block { display: block; position: absolute; border: 1px solid white; background-color: #0093D0; }
+    	.dragging.block { display: block; position: absolute; background-color: #0093D0; }
     	.key {  margin: 0 10px 10px 0; float: left; background-color: #0093D0; }
 
     	.key.s1x1 {
@@ -83,7 +149,7 @@
 		}
 
 		.ui-draggable-dragging,
-		.dragging { opacity: .4; z-index: 999; }
+		.dragging { opacity: .4; z-index: 999; border: 1px solid white; }
 
 		.dragging {
 			-webkit-transition-property: width, height;
@@ -123,17 +189,18 @@
 			window.grid = new Models.Grid(10, 2, $('#workingGrid'));
 
 			$('.key').draggable({
-				helper: renderDragHelper,
-				scroll: true
+				helper: renderDragHelper
 			});
 
 			$('#placeholderGrid .block').droppable({
 				over: overGridHandler,
-				drop: dropGridHandler
+				drop: dropGridHandler,
+				tolerance: "pointer"
 			});
 
 			$('#workingGrid').droppable({
-				out: outGridHandler
+				out: outGridHandler,
+				tolerance: "pointer"
 			});
 
 			$('.key').bind('touchend', keyTouchHandler);
@@ -189,22 +256,28 @@
 		var dropGridHandler = function(event, ui) {
 			var success = grid.place(generateBlock(ui.helper, $(this)));
 			clearFit();
-			$('#workingGrid .block:not("ui-draggable")').draggable({
+			$('#workingGrid .block:not(".ui-draggable")').draggable({
+        		//helper: renderDragHelper,
 				start: function(e, u) {
         			$(this).data("origPosition", $(this).position());
 					prevBlock = generateBlock(u.helper, $(this));
+					showFitWhileDragging;
         		}
+			}).on("contextmenu", function(e) {
+				$("#appBar").stop().slideToggle("fast");
+			   	return false;
 			});
 
 			if (success) {
 				$(ui.helper).remove();
 				if (prevBlock) {
 					grid.remove(prevBlock.x, prevBlock.y);
-					prevBlock = null;
+					prevBlock = null;					
 				}
 			}
-			else
+			else {
 				ui.draggable.animate(ui.draggable.data().origPosition, "fast");
+			}
 		}
 
 		var keyTouchHandler = function(event) {
