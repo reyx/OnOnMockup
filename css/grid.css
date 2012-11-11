@@ -1,0 +1,161 @@
+body { padding: 35px 80px 80px; display: block; overflow: hidden; }
+li { list-style: none; }
+.grid { height: 520px; display: block; width: 2500px; position: absolute; }
+.block { width: 240px; height: 240px; margin: 0 10px 10px 0; background: #fafafa; float: left; }
+#keys,
+#workingArea { float: left; }
+#keys { width: 375px; }
+#workingArea { overflow: auto; overflow-y: hidden; height: 515px; position: relative; margin-left: 80px; padding: 5px 0 0 5px; margin-top: -5px; }
+
+#workingGrid .block,
+.key { background: #0093D0; }
+#workingGrid .block,
+.dragging.block { display: block; position: absolute; background-color: #0093D0; }
+
+.key { margin: 0 10px 10px 0; float: left; background-color: #0093D0; display: block; overflow: hidden; cursor: pointer; position: relative; color: white; }
+
+.block input[type="file"] { position: relative; height: 100%; width: auto; opacity: 0; -moz-opacity: 0; filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0); }
+
+.key.s1x1 {
+  	height: 115px;
+  	width: 115px;
+}
+
+.key.s2x1 {
+  	height: 115px;
+  	width: 240px;
+}
+
+.key.s1x2 {
+  	height: 240px;
+  	width: 115px;
+}
+
+.block.s1x1 {
+  	height: 240px;
+  	width: 240px;
+}
+
+.block.s2x1 {
+  	height: 240px;
+  	width: 490px;
+}
+
+.block.s1x2 {
+  	height: 490px;
+  	width: 240px;
+}
+
+.ui-draggable-dragging,
+.dragging { opacity: .4; z-index: 999; border: 1px solid white; }
+
+.dragging {
+	-webkit-transition-property: width, height;
+	-moz-transition-property: width, height;
+	-o-transition-property: width, height;
+	transition-property: width, height;
+	-webkit-transition-duration: .2s, .2s;
+	-moz-transition-duration: .2s, .2s;
+	-o-transition-duration: .2s, .2s;
+	transition-duration: .2s, .2s;
+	-webkit-transition-timing-function: ease-out, ease-out;
+	-moz-transition-timing-function: ease-out, ease-out;
+	-o-transition-timing-function: ease-out, ease-out;
+	transition-timing-function: ease-out, ease-out; 
+}
+
+.block.dragging.doesntFit { background-color: grey; }
+
+#placeholderGrid.canFit .block.draggingOver { background-color: #67b6ce; }
+
+#placeholderGrid.cantFit .block.draggingOver { background-color: #f4ab8c; }
+
+.selected {
+  outline: 4px #333 solid;
+}
+.selected:after {
+  width: 0;
+  height: 0;
+  border-top: 40px solid #333;
+  border-left: 40px solid transparent;
+  position: absolute;
+  display: block;
+  right: 0;
+  content: ".";
+  top: 0;
+  z-index: 1000;
+}
+.selected:before {
+  position: absolute;
+  content: "\2714";
+  color: #fff;
+  right: 5px;
+  font-family: Tahoma;
+  z-index: 2000;
+}
+
+.key p {
+	margin: 0;
+	line-height: 10px;
+}
+
+.key .text {
+	left: 0;
+	height: 40px;
+	margin: 10px 10px 0;
+}
+
+.key.vertical .text,
+.key.vertical-2 .text,
+.key.middle-image .text,
+.key.middle-text .text {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	height: 40px;
+	width: 95px;
+}
+
+.key.horizontal .text,
+.key.horizontal-2 .text,
+.key.horizontal img,
+.key.horizontal-2 img {
+	float: left;
+}
+
+.key.horizontal .text,
+.key.horizontal-2 .text {
+	width: 80px;
+}
+
+#txt-templates { width: 380px; }
+#txt-section { margin-left: 60px; }
+.title-row { margin-bottom: 5px; }
+
+.color-selector { display: inline-block; position: relative; }
+.color-selector button { min-width: 31px; }
+.color-selector ul {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	z-index: 1000;
+	display: none;
+	float: left;
+	min-width: 31px;
+	margin: 2px 0 0;
+	list-style: none;
+	background-color: white;
+	-webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+	-webkit-background-clip: padding-box;
+	-moz-background-clip: padding;
+	background-clip: padding-box;
+}
+
+.color-selector ul li a {
+	width: 31px;
+	height: 31px;
+	display: block;
+	margin: 1px 0 0;
+}

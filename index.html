@@ -9,24 +9,90 @@
 	<meta name="description" content="gridster.js, a drag-and-drop multi-column jQuery grid plugin">
 	<meta name="author" content="duscksboard">
 
-    <link rel="stylesheet" type="text/css" href="dist/jquery.gridster.min.css" />
-    <link rel="stylesheet" type="text/css" href="dist/icomoon.css" />
-    
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />    
-
-    <!-- remove or comment this line if you want to use the local fonts -->
-   	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+   	<link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.css">
+   	<link rel="stylesheet" type="text/css" href="css/bootmetro.css">
+   	<link rel="stylesheet" type="text/css" href="css/metro-ui-light.css">
+   	<link rel="stylesheet" type="text/css" href="css/icomoon.css">
+   	<link rel="stylesheet" type="text/css" href="css/datepicker.css">
+   	<link rel="stylesheet" type="text/css" href="css/daterangepicker.css">
+   	<link rel="stylesheet" type="text/css" href="css/grid.css">
+   	<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
 </head>
 <body>
+	<div class="title-row row">
+		<div class="span4">
+			<h2 id="txt-templates">Templates</h2>
+		</div>
+		<div class="span4">
+			<h2 id="txt-section">
+				<div class="color-selector">
+	  				<button></button>
+					<ul class="hide">
+						<li><a href="#" style="background: pink;">&nbsp;</a></li>
+						<li><a href="#" style="background: red;">&nbsp;</a></li>
+						<li><a href="#" style="background: green;">&nbsp;</a></li>
+						<li><a href="#" style="background: orange;">&nbsp;</a></li>
+						<li><a href="#" style="background: yellow;">&nbsp;</a></li>
+						<li><a href="#" style="background: blue;">&nbsp;</a></li>
+						<li><a href="#" style="background: grey;">&nbsp;</a></li>
+						<li><a href="#" style="background: purple;">&nbsp;</a></li>
+					</ul>
+				</div>
 
+				Highlights
+			</h2>
+		</div>
+	</div>
 	<div id="keys">
-        <div class="key s1x2 vertical ui-draggable"></div>
-        <div class="key s1x2 vertical-2 ui-draggable"></div>
-        <div class="key s1x2 vertical-3 ui-draggable"></div>
-        <div class="key s1x1 middle-text ui-draggable"></div>
-        <div class="key s2x1 horizontal ui-draggable"></div>
-        <div class="key s1x1 middle-image ui-draggable"></div>
-        <div class="key s2x1 horizontal-2 ui-draggable"></div>
+        <div class="key s1x2 vertical ui-draggable">
+        	<img src="img/templates/vertical-thumb.jpg" alt="">
+        	<div class="text">
+	        	<p>Titulo</p>
+	    		<small>subtitulo</small>
+        	</div>
+        </div>
+        <div class="key s1x2 vertical-2 ui-draggable">
+        	<img src="img/templates/vertical-2-thumb.jpg" alt="">
+        	<div class="text">
+	        	<p>Titulo</p>
+	    		<small>subtitulo</small>
+        	</div>
+        </div>
+        <div class="key s1x2 vertical-3 ui-draggable">
+        	<div class="text">
+	        	<p>Titulo</p>
+	    		<small>subtitulo</small>
+        	</div>
+        	<img src="img/templates/vertical-3-thumb.jpg" alt="">
+        </div>
+        <div class="key s1x1 middle-text ui-draggable">
+        	<div class="text">
+	        	<p>Titulo</p>
+	    		<small>subtitulo</small>
+        	</div>
+        </div>
+        <div class="key s2x1 horizontal ui-draggable">
+        	<img src="img/templates/horizontal-thumb.jpg" alt="">
+        	<div class="text">
+	        	<p>Titulo</p>
+	    		<small>subtitulo</small>
+        	</div>
+        </div>
+        <div class="key s1x1 middle-image ui-draggable">
+        	<img src="img/templates/middle-image.jpg" alt="">
+        	<div class="text">
+	        	<p>Titulo</p>
+	    		<small>subtitulo</small>
+        	</div>
+        </div>
+        <div class="key s2x1 horizontal-2 ui-draggable">
+        	<div class="text">
+	        	<p>Titulo</p>
+	    		<small>subtitulo</small>
+        	</div>
+        	<img src="img/templates/horizontal-2-thumb.jpg" alt="">
+        </div>
 	</div>
 
 	<div id="workingArea">
@@ -34,323 +100,33 @@
 	    <div id="workingGrid" class="grid"></div>
 	</div>
 
-	<div id="appBar">
-		<div class="row">
-			<a class="win-command">
-				<span class="win-commandimage win-commandring">&#xE001;</span>
-				<span class="win-label">Excluir</span>
-			</a>
+	<footer id="appBar" class="hide win-commandlayout navbar-fixed-bottom win-ui-dark">
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span6 align-left">
+
+					<button id="btn-remove" class="win-command">
+						<span class="win-commandimage win-commandring"></span>
+						<span class="win-label">Delete</span>
+					</button>
+
+				</div>
+
+				<div class="span6 align-right">
+
+				</div>
+			</div>
 		</div>
-	</div>
+	</footer>
 
-	<script type="text/javascript" src="libs/jquery/jquery.js"></script>
-	<script type="text/javascript" src="dist/underscore-min.js"></script>
-	<script type="text/javascript" src="dist/block.js"></script>
-	<script type="text/javascript" src="dist/grid.js"></script>
-	<script type="text/javascript" src="dist/jquery.mousewheel.min.js"></script>
-	<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
-    <style>
-    	body { padding: 80px; display: block; overflow: hidden; }
-    	li { list-style: none; }
-    	.grid { height: 520px; display: block; width: 2500px; position: absolute; }
-    	.block { width: 240px; height: 240px; margin: 0 10px 10px 0; background: #fafafa; }
-    	.block { width: 240px; height: 240px; margin: 0 10px 10px 0; background: #fafafa; float: left; }
-    	.win-command {
-    		text-align: center;
-			font-size: 9pt;
-			font-weight: normal;
-			line-height: 16px;
-			cursor: pointer;
-			background: none;
-			background-clip: border-box;
-			height: auto;
-			padding: 12px 0;
-			margin: 0 5px;
-			border: 0;
-			min-width: 42px;
-			text-align: center;
-			font-size: 9pt;
-			font-weight: normal;
-			line-height: 16px;
-			vertical-align: middle;
-			color: white;
-    	}
-    	.win-commandring { background-color: transparent; border-color: white; border-width: 2px; border-style: solid; -webkit-border-radius: 50%; -moz-border-radius: 50%; border-radius: 50%; background-clip: border-box; }
-    	.win-commandimage { 
-    		color: white; font-family: "IcoMoon";
-			letter-spacing: 0;
-			vertical-align: middle;
-			font-size: 14pt;
-			margin: -2px;
-			line-height: 40px;
-			background-position: 0 0;
-			display: inline-block;
-			width: 40px;
-			height: 40px;
-			background-size: 160px 80px;
-		}
-		.win-label {
-			position: relative;
-			line-height: 20px;
-			display: block;
-			max-width: 88px; /* 100px button, but allow for 2px margins and 4px padding on each side */
-			padding-left: 4px;  /* 12px between buttons, 6px per side, minus 2px margins */
-			padding-right: 4px;
-			overflow: hidden;
-			word-wrap: break-word;
-			word-break: keep-all;
-			top: 1px;
-			text-align: center;
-			font-size: 9pt;
-			font-weight: normal;
-			font-family: "Open Sans", Helvetica,"Helvetica Neue",Sans-Serif;
-		}
-    	#appBar { position: absolute; bottom: 0; left: 0; right: 0; background: #0093D0; display: none; }
-    	#appBar .row { margin: 20px 80px; }
-    	#keys, 
-    	#workingArea { float: left; }
-    	#keys { width: 375px; }
-    	#workingArea { overflow: auto; overflow-y: hidden; height: 515px; position: relative; margin-left: 80px; }
-    	
-    	#workingGrid .block, 
-    	.key { background: #0093D0; }
-    	#workingGrid .block,
-    	.dragging.block { display: block; position: absolute; background-color: #0093D0; }
-    	.key {  margin: 0 10px 10px 0; float: left; background-color: #0093D0; }
-
-    	.key.s1x1 {
-		  	height: 115px;
-		  	width: 115px;
-		}
-
-		.key.s2x1 {
-		  	height: 115px;
-		  	width: 240px; 
-		}
-
-		.key.s1x2 {
-		  	height: 240px;
-		  	width: 115px; 
-		}
-
-		.block.s1x1 {
-		  	height: 240px;
-		  	width: 240px;
-		}
-
-		.block.s2x1 {
-		  	height: 240px;
-		  	width: 490px; 
-		}
-
-		.block.s1x2 {
-		  	height: 490px;
-		  	width: 240px; 
-		}
-
-		.ui-draggable-dragging,
-		.dragging { opacity: .4; z-index: 999; border: 1px solid white; }
-
-		.dragging {
-			-webkit-transition-property: width, height;
-			-moz-transition-property: width, height;
-			-o-transition-property: width, height;
-			transition-property: width, height;
-			-webkit-transition-duration: .2s, .2s;
-			-moz-transition-duration: .2s, .2s;
-			-o-transition-duration: .2s, .2s;
-			transition-duration: .2s, .2s;
-			-webkit-transition-timing-function: ease-out, ease-out;
-			-moz-transition-timing-function: ease-out, ease-out;
-			-o-transition-timing-function: ease-out, ease-out;
-			transition-timing-function: ease-out, ease-out; 
-		}
-
-		.block.dragging.doesntFit { background-color: grey; }
-
-		#placeholderGrid.canFit .block.draggingOver { background-color: #67b6ce; }
-
-		#placeholderGrid.cantFit .block.draggingOver { background-color: #f4ab8c; }
-    </style>
-    <script>
-		var prevBlock;
-
-	    $(function() {
-			$('#workingArea').width($(window).width() - $('#keys').width() - 256).mousewheel(function(event, delta) {
-      			this.scrollLeft -= (delta * 30);    
-      			event.preventDefault();
-   			});
-
-			window.placeholderGrid = new Models.Grid(10, 2, $('#placeholderGrid'));
-			_.times(20, function(){
-				placeholderGrid.add(new Models.Block(1, 1))
-			});
-
-			window.grid = new Models.Grid(10, 2, $('#workingGrid'));
-
-			$('.key').draggable({
-				helper: renderDragHelper
-			});
-
-			$('#placeholderGrid .block').droppable({
-				over: overGridHandler,
-				drop: dropGridHandler,
-				tolerance: "pointer"
-			});
-
-			$('#workingGrid').droppable({
-				out: outGridHandler,
-				tolerance: "pointer"
-			});
-
-			$('.key').bind('touchend', keyTouchHandler);
-	    });
-
-	    var renderDragHelper = function() {
-			var sizeHash = new Models.Block().sizeFromElement($(this).attr('class'));
-			var sizeClass = 's' + sizeHash.width + 'x' + sizeHash.height;
-			var helper = $('<li class="key dragging ' + sizeClass + '"></li>');
-
-			return helper;
-		}
-
-		var overGridHandler = function(event, ui) {
-		  
-			// scale key up to grid size
-			if (ui.helper.hasClass('key')){
-				ui.helper.removeClass('key').addClass('block');
-			}
-
-			// add class to style according to wether piece fits or not
-			$('#placeholderGrid').removeClass('canFit');
-			$('#placeholderGrid').removeClass('cantFit');
-
-			if (grid.canFit(generateBlock(ui.helper, $(this)))){
-				$('#placeholderGrid').addClass('canFit');
-			} else {
-				$('#placeholderGrid').addClass('cantFit');
-			}
-
-			showFitWhileDragging(ui.helper, $(this));
-		}
-
-		var outGridHandler = function() {
-		  	clearFit();
-		}
-
-		var showFitWhileDragging = function(helper, unit) {
-			var overlapped = placeholderGrid.blocksOverlappedByBlock(generateBlock(helper, unit) );
-
-			$('#placeholderGrid .block').removeClass('draggingOver');
-
-			_(overlapped).each(function(block) {
-				block.element.addClass('draggingOver');
-			});
-		}
-
-		var clearFit = function() {
-			$('.dragging.block').removeClass('block').addClass('key');
-			$('.draggingOver').removeClass('draggingOver');
-		}
-
-		var dropGridHandler = function(event, ui) {
-			var success = grid.place(generateBlock(ui.helper, $(this)));
-			clearFit();
-			$('#workingGrid .block:not(".ui-draggable")').draggable({
-        		//helper: renderDragHelper,
-				start: function(e, u) {
-        			$(this).data("origPosition", $(this).position());
-					prevBlock = generateBlock(u.helper, $(this));
-					showFitWhileDragging;
-        		}
-			}).on("contextmenu", function(e) {
-				$("#appBar").stop().slideToggle("fast");
-			   	return false;
-			});
-
-			if (success) {
-				$(ui.helper).remove();
-				if (prevBlock) {
-					grid.remove(prevBlock.x, prevBlock.y);
-					prevBlock = null;					
-				}
-			}
-			else {
-				ui.draggable.animate(ui.draggable.data().origPosition, "fast");
-			}
-		}
-
-		var keyTouchHandler = function(event) {
-			var block = new Models.Block();
-			var size = block.sizeFromElement($(this).attr('class'));
-
-			block.width = size.width;
-			block.height = size.height;
-
-			grid.add( block );
-
-			if (grid.isComplete()) {
-				enableShowCode();
-			}
-		}
-
-		var generateBlock = function(draggedBlock, unit) {
-			var block = new Models.Block();
-			var size = block.sizeFromElement(draggedBlock.attr('class'))
-			var position = block.positionFromElement(unit.attr('class'));
-
-			block.width = size.width;
-			block.height = size.height;
-			block.x = position.x;
-			block.y = position.y;
-
-			return block;
-		}
-
-		var revertDraggable = function revertDraggable($selector) {
-		    $selector.each(function() {
-		        var $this = $(this),
-		            position = $this.data("originalPosition");
-
-		        if (position) {
-		            $this.animate({
-		                left: position.left,
-		                top: position.top
-		            }, 500, function() {
-		                $this.data("originalPosition", null);
-		            });
-		        }
-		    });
-		}
-    </script>
-	<script type="text/javascript">
-  		/*var gridster;
-
-	  	$(function() {
-		    gridster = $(".gridster > ul").gridster({
-		        widget_margins: [5, 5],
-		        widget_base_dimensions: [240, 240],
-		        min_widget_width: 1
-		    }).data('gridster');
-
-			var w = 0;
-		    $(".gridster").each(function() { 
-	    		$(this).find('li[data-row="1"]').each(function(){
-	    			w += $(this).width();
-	    		});
-		    	$(this).css('width', w + 'px');
-		    	w = 0;
-		    });
-
-			$('#hub > li').each(function() {
-				$(this).find('li[data-row="1"]').not(':first').each(function(){
-	    			w += 10;
-	    		});
-				w += $(this).width() + 80;
-			});
-
-		    $('#hub').css('width', w + 'px');
-	  	});*/
-	</script>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/underscore-min.js"></script>
+	<script type="text/javascript" src="js/block.js"></script>
+	<script type="text/javascript" src="js/grid.js"></script>
+	<script type="text/javascript" src="js/jquery.mousewheel.min.js"></script>
+	<script type="text/javascript" src="js/jquery.elastic.source.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>
