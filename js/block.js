@@ -1,11 +1,13 @@
 var Models = window.Models || {};
 
-Models.Block = function(w, h, _x, _y) {
+Models.Block = function(fields, w, h, _x, _y) {
     this.width = w;
     this.height = h;
     this.x = _x;
     this.y = _y;
+    this.template = 'horizontal';
     this.element;
+    this.fields = fields;
 
     this.units = function() {
         units = [];
@@ -62,12 +64,35 @@ Models.Block = function(w, h, _x, _y) {
         if (_(this.element).isUndefined()) {
             this.element = $(document.createElement('div'))
             .addClass('block')
-            .addClass( this.sizeClassName())
-            .addClass( this.positionClassName())
+            .addClass(this.sizeClassName())
+            .addClass(this.positionClassName())
+            .attr('data-template', this.template)
             .css({
                 "top": (this.y * 250) + "px",
                 "left": (this.x * 250) + "px"
             });
+
+            if (this.fields) {
+                var textContainer = $('<div class="text-container">');
+                
+                textContainer
+                    .append('<textarea placeholder="Title" id="' + this.x +'x' + this.y + 'title" name="' + this.x +'x' + this.y + 'title" class="title"></textarea>')
+                    .append('<textarea placeholder="Subtitle" id="' + this.x +'x' + this.y + 'subtitle" name="' + this.x +'x' + this.y + 'subtitle" class="subtitle"></textarea>');
+
+                if (this.template == 'vertical-2') {
+                    textContainer.css('background', background);
+                }
+                if (this.template != 'middle-text') {  
+                    this.element
+                        // .append('<input type="file" id="' + this.x +'x' + this.y + 'file" name="' + this.x +'x' + this.y + 'file" class="file" />')
+                        .append('<img src="img/templates/' + this.template + '.jpg" id="' + this.x +'x' + this.y + 'image" name="' + this.x +'x' + this.y + 'image" class="image" />');
+                }
+
+                this.element
+                    .append(textContainer);
+
+                textContainer.find('textarea').TextAreaExpander(0, 240);
+            }
         }
 
         return this.element;

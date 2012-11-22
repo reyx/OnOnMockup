@@ -5,7 +5,7 @@ Models.Grid = function(w, h, el) {
     this.width = w;
     this.height = h;
     this.blocks = [];
-    this.field = new Models.Block(w, h, 0, 0);
+    this.field = new Models.Block(false, w, h, 0, 0);
     this.element = el;
 
     this.place = function(block, x, y) {

@@ -13,8 +13,8 @@ $(function() {
 	});
 
 	window.placeholderGrid = new Models.Grid(10, 2, $('#placeholderGrid'));
-	_.times(20, function(){
-		placeholderGrid.add(new Models.Block(1, 1))
+	_.times(20, function() {
+		placeholderGrid.add(new Models.Block(false, 1, 1))
 	});
 
 	window.grid = new Models.Grid(10, 2, $('#workingGrid'));
@@ -46,26 +46,41 @@ $(function() {
 		toggleAppBar();
 	});
 
-	$('.color-selector button').on('click',function(){
+	$('.color-selector button').on('click',function() {
 		$('.color-selector ul').toggle();
+	});
+
+	$('#txt-templates').on('click', function() {
+		if ($('#keys').width() == 0) {
+			$('#keys').show().width(375);
+			$('#workingArea').css('margin-left', '80px');
+			resizeWidget($(window).width() - $('#keys').width() - 246);
+		} else {
+			$('#keys').hide().width(0);
+			$('#workingArea').css('margin-left', '0');
+			resizeWidget($(window).width() - $('#keys').width() - 166);
+		}
 	});
 
 	$('.color-selector ul li a').on('click', function() {
 		$('.color-selector ul').toggle();
 		background = $(this).css('background');
-		$('.key, #workingGrid .block, .color-selector button').css('background', background);
+		$('.key, .key .text, #workingGrid .block, .color-selector button, #workingGrid [data-template="vertical-2"] .text-container').css('background', background);
 		$('#txt-section').css('color', background);
 	});
 });
 
-var resizeWidget = function() {
-	$('#workingArea').width($(window).width() - $('#keys').width() - 246);
+var resizeWidget = function(w) {
+	if (w)
+		$('#workingArea').width(w);
+	else
+		$('#workingArea').width($(window).width() - $('#keys').width() - 246);
 }
 
 var renderDragHelper = function() {
-	var sizeHash = new Models.Block().sizeFromElement($(this).attr('class'));
+	var sizeHash = new Models.Block(false).sizeFromElement($(this).attr('class'));
 	var sizeClass = 's' + sizeHash.width + 'x' + sizeHash.height;
-	var helper = $('<li class="key dragging ' + sizeClass + '"></li>');
+	var helper = $('<li class="key dragging ' + sizeClass + '"></li>').attr('data-template', $(this).attr('data-template'));
 
 	return helper;
 }
@@ -115,6 +130,11 @@ var dropGridHandler = function(event, ui) {
 	$('#workingGrid .block:not(".ui-draggable")')
 		.draggable({
 			//helper: renderDragHelper,
+			cursorAt: { 
+				left: 20,
+				top: 20
+			},
+			containment: 'parent',
 			start: function(e, u) {
 				$(this).data("origPosition", $(this).position());
 				prevBlock = generateBlock(u.helper, $(this));
@@ -150,7 +170,7 @@ var toggleAppBar = function() {
 }
 
 var keyTouchHandler = function(event) {
-	var block = new Models.Block();
+	var block = new Models.Block(false);
 	var size = block.sizeFromElement($(this).attr('class'));
 
 	block.width = size.width;
@@ -164,7 +184,7 @@ var keyTouchHandler = function(event) {
 }
 
 var generateBlock = function(draggedBlock, unit) {
-	var block = new Models.Block();
+	var block = new Models.Block(true);
 	var size = block.sizeFromElement(draggedBlock.attr('class'))
 	var position = block.positionFromElement(unit.attr('class'));
 
@@ -172,6 +192,7 @@ var generateBlock = function(draggedBlock, unit) {
 	block.height = size.height;
 	block.x = position.x;
 	block.y = position.y;
+	block.template = draggedBlock.attr('data-template');
 
 	return block;
 }
