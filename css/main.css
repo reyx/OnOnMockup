@@ -1,0 +1,10 @@
+body { padding: 20px 0 0; margin: 0; }
+.main-title { font-family: "Segoe UI Light"; font-size: 4em; }
+.main-back { width: 80px; text-align: center; }
+.main-back,
+.main-container { display: inline-block; }
+
+a:hover, a:hover:active { background-color: #666666; color: white; text-decoration: none; }
+button.win-command { min-width: 46px; }
+.win-backbutton { line-height: 36px; position: relative; left: 0; top: 12px; }
+::selection, select:focus::-ms-value { background-color: #666666; color: white; }
